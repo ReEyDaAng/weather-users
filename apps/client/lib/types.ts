@@ -1,24 +1,24 @@
 // apps/client/lib/types.ts
-export interface RandomUserName { title: string; first: string; last: string }
-export interface RandomUserLocationCoords { latitude: string; longitude: string }
-export interface RandomUserLocation { city: string; country: string; coordinates: RandomUserLocationCoords }
-export interface RandomUserPicture { large: string; medium: string; thumbnail: string }
-export interface RandomUser {
-  gender: "male" | "female";
-  name: RandomUserName;
-  location: RandomUserLocation;
-  email: string;
-  picture: RandomUserPicture;
+export type User = {
   login: { uuid: string };
-}
+  name: { first: string; last: string };
+  email: string;
+  gender: 'male' | 'female';
+  picture: { large: string; medium: string; thumbnail: string };
+  location: {
+    city: string;
+    country: string;
+    coordinates: { latitude: string; longitude: string };
+  };
+};
 
-export interface UsersApiResponse {
-  results: RandomUser[];
+export type UsersApiResponse = {
+  results: User[];
   info: { seed: string; results: number; page: number };
-}
+};
 
-export interface SavedUser {
-  id: string;          // login.uuid
-  payload: RandomUser; // збережений JSON користувача
+export type SavedUser = {
+  id: string;            // login.uuid
+  payload: User;         // збережений JSON
   created_at?: string;
-}
+};
