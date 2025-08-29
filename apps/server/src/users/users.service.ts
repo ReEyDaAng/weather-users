@@ -1,6 +1,3 @@
-import fetch from 'node-fetch';
-
-
 export class UsersService {
 async fetchUsers(page = 1, results = 12, seed = 'demo') {
 const url = new URL('https://randomuser.me/api/');
