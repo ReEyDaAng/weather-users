@@ -1,6 +1,9 @@
 const BASE = process.env.NEXT_PUBLIC_API_BASE!;
 
-export async function api<T = any>(path: string, init?: RequestInit): Promise<T> {
+export async function api<T = unknown>(
+  path: string,
+  init?: RequestInit
+): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     ...init,
     headers: {

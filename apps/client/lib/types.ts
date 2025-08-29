@@ -22,3 +22,9 @@ export type SavedUser = {
   payload: AppUser;         // збережений JSON
   created_at?: string;
 };
+
+export type WeatherDTO = {
+  current: { temp: number | null; code: number | null };
+  today: { min: number | null; max: number | null };
+  raw?: unknown;
+};
