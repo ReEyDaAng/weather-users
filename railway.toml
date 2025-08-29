@@ -1,0 +1,9 @@
+[services.server]
+root  = "apps/server"
+build = "pnpm i --frozen-lockfile && pnpm build"
+start = "node dist/main.js"
+
+[services.client]
+root  = "apps/client"
+build = "pnpm i --frozen-lockfile && pnpm build"
+start = "pnpm start"
