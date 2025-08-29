@@ -5,13 +5,13 @@ import { useWeather } from '@/hooks/useWeather';
 import { weatherCodeMap } from '@/lib/weatherCodeMap';
 import { useToastStore } from './Toast';
 import { useSaveUser, useRemoveUser } from '@/hooks/useSavedMutations';
-import type { AppUser } from '@/lib/types';
+import type { AppUser } from '@/lib/types'; // ⬅️ тип користувача
 
 export default function UserCard({
   user,
   hideSave = false,
 }: {
-  user: AppUser;
+  user: AppUser;        // ⬅️ більше ніяких any
   hideSave?: boolean;
 }) {
   const lat = parseFloat(user.location.coordinates.latitude);
@@ -35,13 +35,14 @@ export default function UserCard({
     await removeMut.mutateAsync(user.login.uuid);
     addToast('Removed!');
   };
+
   return (
     <div className="rounded-2xl shadow p-4 bg-white">
       <div className="flex gap-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={user.picture.large}
-          alt={`${user.name.first} ${user.name.last}`}
+          alt=""
           className="w-20 h-20 rounded-full object-cover"
         />
         <div>
@@ -71,21 +72,13 @@ export default function UserCard({
         </div>
         <div className="flex gap-2">
           {!hideSave && (
-            <button
-              className="px-3 py-1 rounded bg-slate-900 text-white disabled:opacity-50"
-              onClick={onSave}
-              disabled={saveMut.isPending}
-            >
-              {saveMut.isPending ? 'Saving…' : 'Save'}
+            <button className="px-3 py-1 rounded bg-slate-900 text-white" onClick={onSave}>
+              Save
             </button>
           )}
           {hideSave && (
-            <button
-              onClick={onRemove}
-              className="px-3 py-1 rounded bg-red-600 text-white disabled:opacity-50"
-              disabled={removeMut.isPending}
-            >
-              {removeMut.isPending ? 'Removing…' : 'Remove'}
+            <button onClick={onRemove} className="px-3 py-1 rounded bg-red-600 text-white">
+              Remove
             </button>
           )}
           <button className="px-3 py-1 rounded border" onClick={() => setOpen(true)}>
@@ -105,9 +98,7 @@ export default function UserCard({
           >
             <div className="flex justify-between items-center mb-3">
               <h2 className="text-lg font-semibold">Weather details</h2>
-              <button onClick={() => setOpen(false)} className="text-slate-500">
-                ✕
-              </button>
+              <button onClick={() => setOpen(false)} className="text-slate-500">✕</button>
             </div>
             {data ? (
               <div className="space-y-1">
@@ -115,9 +106,7 @@ export default function UserCard({
                   {w.emoji} {w.label}
                 </div>
                 <div>Now: {data.current.temp}°C</div>
-                <div>
-                  Today: {data.today.min}°C — {data.today.max}°C
-                </div>
+                <div>Today: {data.today.min}°C — {data.today.max}°C</div>
               </div>
             ) : (
               <div>Loading…</div>
