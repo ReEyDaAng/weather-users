@@ -3,15 +3,15 @@
 import { useState } from 'react';
 import { useWeather } from '@/hooks/useWeather';
 import { weatherCodeMap } from '@/lib/weatherCodeMap';
-import { api } from '@/lib/api';
 import { useToastStore } from './Toast';
 import { useSaveUser, useRemoveUser } from '@/hooks/useSavedMutations';
+import type { AppUser } from '@/lib/types';
 
 export default function UserCard({
   user,
   hideSave = false,
 }: {
-  user: any;
+  user: AppUser;
   hideSave?: boolean;
 }) {
   const lat = parseFloat(user.location.coordinates.latitude);
@@ -35,14 +35,13 @@ export default function UserCard({
     await removeMut.mutateAsync(user.login.uuid);
     addToast('Removed!');
   };
-
   return (
     <div className="rounded-2xl shadow p-4 bg-white">
       <div className="flex gap-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={user.picture.large}
-          alt=""
+          alt={`${user.name.first} ${user.name.last}`}
           className="w-20 h-20 rounded-full object-cover"
         />
         <div>
@@ -71,19 +70,27 @@ export default function UserCard({
           )}
         </div>
         <div className="flex gap-2">
-            {!hideSave && (
-                <button className="px-3 py-1 rounded bg-slate-900 text-white" onClick={onSave}>
-                Save
-                </button>
-            )}
-            {hideSave && (
-            <button onClick={onRemove} className="px-3 py-1 rounded bg-red-600 text-white">
-                Remove
+          {!hideSave && (
+            <button
+              className="px-3 py-1 rounded bg-slate-900 text-white disabled:opacity-50"
+              onClick={onSave}
+              disabled={saveMut.isPending}
+            >
+              {saveMut.isPending ? 'Saving…' : 'Save'}
             </button>
-            )}
-            <button className="px-3 py-1 rounded border" onClick={() => setOpen(true)}>
-                Weather
+          )}
+          {hideSave && (
+            <button
+              onClick={onRemove}
+              className="px-3 py-1 rounded bg-red-600 text-white disabled:opacity-50"
+              disabled={removeMut.isPending}
+            >
+              {removeMut.isPending ? 'Removing…' : 'Remove'}
             </button>
+          )}
+          <button className="px-3 py-1 rounded border" onClick={() => setOpen(true)}>
+            Weather
+          </button>
         </div>
       </div>
 

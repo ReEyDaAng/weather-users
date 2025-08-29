@@ -1,5 +1,5 @@
 // apps/client/lib/types.ts
-export type User = {
+export type AppUser = {
   login: { uuid: string };
   name: { first: string; last: string };
   email: string;
@@ -13,12 +13,12 @@ export type User = {
 };
 
 export type UsersApiResponse = {
-  results: User[];
+  results: AppUser[];
   info: { seed: string; results: number; page: number };
 };
 
 export type SavedUser = {
   id: string;            // login.uuid
-  payload: User;         // збережений JSON
+  payload: AppUser;         // збережений JSON
   created_at?: string;
 };
