@@ -2,6 +2,7 @@ import '../styles/global.css';
 import Providers from './providers';
 import { ToastContainer } from '@/components/Toast';
 import type { Metadata } from 'next';
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: 'Home | Weather Users',
@@ -14,8 +15,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-slate-50 text-slate-900">
         <header className="border-b bg-white">
           <nav className="container mx-auto px-4 py-3 flex gap-4">
-            <a href="/" className="font-semibold">Home</a>
-            <a href="/saved" className="text-slate-600 hover:text-slate-900">Saved</a>
+            <Link href="/" className="font-semibold">Home</Link>
+            <Link href="/saved" className="text-slate-600 hover:text-slate-900">Saved</Link>
           </nav>
         </header>
 
