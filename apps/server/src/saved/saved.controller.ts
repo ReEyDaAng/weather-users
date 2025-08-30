@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { SavedService } from './saved.service';
 import { SaveUserDto } from './saved.dto';
 
-@Controller('api/saved')
+@Controller('saved')
 export class SavedController {
   constructor(private readonly saved: SavedService) {}
 

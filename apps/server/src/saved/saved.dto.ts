@@ -1,63 +1,13 @@
-import { IsString, IsNotEmpty, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-
-class UserNameDto {
-  @IsString() first!: string;
-  @IsString() last!: string;
-}
-
-class UserLoginDto {
-  @IsString() uuid!: string;
-}
-
-class UserCoordinatesDto {
-  @IsString() latitude!: string;
-  @IsString() longitude!: string;
-}
-
-class UserLocationDto {
-  @IsString() city!: string;
-  @IsString() country!: string;
-
-  @ValidateNested()
-  @Type(() => UserCoordinatesDto)
-  coordinates!: UserCoordinatesDto;
-}
-
-class UserPictureDto {
-  @IsString() large!: string;
-}
-
-export class AppUserDto {
-  @ValidateNested()
-  @Type(() => UserLoginDto)
-  login!: UserLoginDto;
-
-  @ValidateNested()
-  @Type(() => UserNameDto)
-  name!: UserNameDto;
-
-  @IsString()
-  gender!: string;
-
-  @ValidateNested()
-  @Type(() => UserLocationDto)
-  location!: UserLocationDto;
-
-  @IsString()
-  email!: string;
-
-  @ValidateNested()
-  @Type(() => UserPictureDto)
-  picture!: UserPictureDto;
-}
+import { IsString, IsOptional, IsObject } from 'class-validator';
+import type { AppUser } from 'src/common/types';
 
 export class SaveUserDto {
   @IsString()
-  @IsNotEmpty()
-  id!: string; // login.uuid
+  id: string;
 
-  @ValidateNested()
-  @Type(() => AppUserDto)
-  payload!: AppUserDto;
+  @IsObject()
+  payload: AppUser;
+
+  @IsOptional()
+  created_at?: string;
 }

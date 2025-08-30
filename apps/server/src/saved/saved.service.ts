@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { Injectable } from '@nestjs/common';
+import { SaveUserDto } from './saved.dto';
 
 export interface SavedUser {
   id: string;
@@ -24,14 +25,18 @@ export class SavedService {
     return data as SavedUser[];
   }
 
-    async save(user: SavedUser) {
+    async save(user: SaveUserDto) {
     const { error } = await this.supa
         .from('saved_users')
-        .upsert({ id: user.id, payload: user.payload }, { onConflict: 'id' }); // ← додано
+        .upsert({
+        id: user.id,
+        payload: user.payload,   // jsonb нормально приймає plain object
+        });
 
     if (error) throw error;
     return { ok: true };
     }
+
 
 
   async remove(id: string) {
