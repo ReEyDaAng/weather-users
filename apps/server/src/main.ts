@@ -11,20 +11,30 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const allowList = (process.env.CORS_ORIGIN ?? '')
-    .split(',')
-    .map(s => s.trim().replace(/\/$/, '')) // без кінцевого /
-    .filter(Boolean);
+  .split(',')
+  .map(s => s.trim().replace(/\/$/, ''))
+  .filter(Boolean);
 
-  const corsOptions: CorsOptions = {
+const corsOptions: CorsOptions = {
     origin: (origin, cb) => {
-      if (!origin) return cb(null, true);           // SSR/healthchecks
+      // SSR/healthchecks/CLI -> немає Origin
+      if (!origin) return cb(null, true);
+
       const o = origin.replace(/\/$/, '');
+      // Тимчасово: якщо whitelist порожній — пускаємо всіх
+      if (!allowList.length) return cb(null, true);
+
       if (allowList.includes(o)) return cb(null, true);
-      return cb(new Error(`Not allowed by CORS: ${origin}`), false);
+
+      // LOG для дебагу
+      console.warn('[CORS] reject', { origin, allowList });
+      return cb(null, false); // ВАЖЛИВО: не кидати Error, інакше не прийдуть заголовки
     },
     methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
+    credentials: false,                 // cookies не використовуємо — простіше
+    optionsSuccessStatus: 204,          // для деяких проксі/браузерів
+    preflightContinue: false,
   };
 
   app.enableCors(corsOptions);
