@@ -14,21 +14,24 @@ async function bootstrap() {
     .map(s => s.trim().replace(/\/$/, '')) // без кінцевого слеша
     .filter(Boolean);
 
-  const corsOptions: CorsOptions = {
-    origin: (
-      origin: string | undefined,
-      callback: (err: Error | null, allow?: boolean) => void
-    ) => {
-      // запити без Origin: SSR, curl, healthchecks
-      if (!origin) return callback(null, true);
-      const o = origin.replace(/\/$/, '');
-      if (allowList.includes(o)) return callback(null, true);
-      return callback(new Error(`Not allowed by CORS: ${origin}`), false);
-    },
-    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  };
+// apps/server/src/main.ts
+const corsOptions: CorsOptions = {
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true);
+    const o = origin.replace(/\/$/, '');
+    const allowed = allowList.includes(o);
+    if (!allowed) {
+      console.log('[CORS] reject', { origin, normalized: o, allowList });
+      return cb(new Error(`Not allowed by CORS: ${origin}`), false);
+    }
+    return cb(null, true);
+  },
+  methods: ['GET','POST','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
+  credentials: true,
+  // optionsSuccessStatus: 204, // можна додати, але не обов'язково
+};
+
 
   app.enableCors(corsOptions);
 
