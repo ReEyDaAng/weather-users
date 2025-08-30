@@ -20,7 +20,7 @@ export class SavedService {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('[saved:list]', error); // ← побачимо точну причину в Railway Logs
+      console.error('[saved:list]', error);
       throw new InternalServerErrorException(error.message);
     }
     return data as Row[];

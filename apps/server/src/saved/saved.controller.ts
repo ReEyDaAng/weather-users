@@ -11,7 +11,7 @@ export class SavedController {
     return this.saved.list();
   }
 
-  @Post()
+  /*@Post()
   save(@Body() dto: SaveUserDto) {
     return this.saved.save(dto);
   }
@@ -19,5 +19,5 @@ export class SavedController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.saved.remove(id);
-  }
+  }*/
 }
