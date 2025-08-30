@@ -10,8 +10,6 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix('api');
-
   const allowList = (process.env.CORS_ORIGIN ?? '')
   .split(',')
   .map(s => s.trim().replace(/\/$/, ''))
