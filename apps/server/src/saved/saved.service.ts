@@ -1,4 +1,3 @@
-// server/src/saved/saved.service.ts
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
 import type { SaveUserDto } from './saved.dto';
@@ -8,15 +7,11 @@ type Row = { id: string; payload: unknown; created_at: string };
 @Injectable()
 export class SavedService {
   private supa = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE!,
-    {
-      // service_role – без сесій
-      auth: { persistSession: false },
-      // на всякий випадок фіксуємо схему:
-      db: { schema: 'public' },
-    }
-  );
+    (process.env.SUPABASE_URL ?? '').trim(),           
+    (process.env.SUPABASE_SERVICE_ROLE ?? '').trim(),
+    { auth: { persistSession: false }, db: { schema: 'public' } }
+    );
+
 
   async list() {
     const { data, error } = await this.supa
