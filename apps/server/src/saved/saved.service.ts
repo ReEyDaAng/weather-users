@@ -1,37 +1,39 @@
-import { createClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { Injectable } from '@nestjs/common';
 
+type Row = { id: string; payload: any; created_at: string };
 
-export interface SavedUser {
-id: string; // randomuser uuid
-payload: any; // full user json
-created_at?: string;
-}
-
-
+@Injectable()
 export class SavedService {
-private supa = createClient(
-process.env.SUPABASE_URL!,
-process.env.SUPABASE_SERVICE_ROLE!, // server-only
-);
+  constructor(private readonly supa: SupabaseClient) {}
 
+  async list() {
+    const { data, error } = await this.supa
+      .from('saved_users')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-async list() {
-const { data, error } = await this.supa.from('saved_users').select('*').order('created_at', { ascending: false });
-if (error) throw error;
-return data as SavedUser[];
-}
+    if (error) throw error;
+    return (data ?? []) as Row[];
+  }
 
+  async save(input: { id: string; payload: any }) {
+    // ВАЖЛИВО: пишемо саме { id, payload }
+    const { error } = await this.supa
+      .from('saved_users')
+      .upsert({ id: input.id, payload: input.payload });
 
-async save(user: SavedUser) {
-const { error } = await this.supa.from('saved_users').upsert({ id: user.id, payload: user.payload });
-if (error) throw error;
-return { ok: true };
-}
+    if (error) throw error;
+    return { ok: true };
+  }
 
+  async remove(id: string) {
+    const { error } = await this.supa
+      .from('saved_users')
+      .delete()
+      .eq('id', id);
 
-async remove(id: string) {
-const { error } = await this.supa.from('saved_users').delete().eq('id', id);
-if (error) throw error;
-return { ok: true };
-}
+    if (error) throw error;
+    return { ok: true };
+  }
 }
