@@ -1,12 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { api } from '@/lib/api';
+import type { WeatherDTO } from '@/lib/types';
 
-
-export function useWeather(lat: number, lon: number, auto = true) {
-return useQuery({
-queryKey: ['weather', lat, lon],
-queryFn: () => api(`/api/weather?lat=${lat}&lon=${lon}`),
-enabled: Number.isFinite(lat) && Number.isFinite(lon),
-refetchInterval: auto ? 300_000 : false,
-});
+export function useWeather(
+  lat: number,
+  lon: number,
+  enabled = true
+): UseQueryResult<WeatherDTO> {
+  return useQuery<WeatherDTO>({
+    queryKey: ['weather', lat, lon],
+    enabled,
+    queryFn: () => api<WeatherDTO>(`/api/weather?lat=${lat}&lon=${lon}`),
+  });
 }

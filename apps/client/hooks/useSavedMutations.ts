@@ -25,8 +25,6 @@ export function useRemoveUser() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => api(`/api/saved/${id}`, { method: 'DELETE' }),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['saved'] });
-    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['saved'] }),
   });
 }
