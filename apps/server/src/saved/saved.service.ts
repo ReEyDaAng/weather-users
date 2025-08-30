@@ -24,14 +24,15 @@ export class SavedService {
     return data as SavedUser[];
   }
 
-  async save(user: SavedUser) {
+    async save(user: SavedUser) {
     const { error } = await this.supa
-      .from('saved_users')
-      .upsert({ id: user.id, payload: user.payload }, { onConflict: 'id' }); // <—
+        .from('saved_users')
+        .upsert({ id: user.id, payload: user.payload }, { onConflict: 'id' }); // ← додано
 
     if (error) throw error;
     return { ok: true };
-  }
+    }
+
 
   async remove(id: string) {
     const { error } = await this.supa.from('saved_users').delete().eq('id', id);
