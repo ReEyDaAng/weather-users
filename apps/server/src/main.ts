@@ -3,29 +3,50 @@ import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 
-
 dotenv.config();
 
-
 async function bootstrap() {
-const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);
 
-const origins = (process.env.CORS_ORIGIN ?? '')
-  .split(',')
-  .map(s => s.trim())
-  .filter(Boolean);
+  // Parse CORS origins from environment variable
+  const origins = (process.env.CORS_ORIGIN ?? '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
 
-app.enableCors({
-  origin: origins,
-  methods: ['GET','POST','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'],
-});
-app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  console.log('CORS Origins configured:', origins);
 
-const port = process.env.PORT || 5000;
+  app.enableCors({
+    origin: origins.length > 0 ? origins : true, // Fallback to allow all if no origins specified
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT', 'PATCH'],
+    allowedHeaders: [
+      'Content-Type', 
+      'Authorization', 
+      'Accept', 
+      'Origin', 
+      'X-Requested-With'
+    ],
+    credentials: true, // Important if you're sending cookies or auth headers
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+  });
 
-await app.listen(port);
+  app.useGlobalPipes(new ValidationPipe({ 
+    whitelist: true, 
+    transform: true,
+    forbidNonWhitelisted: true
+  }));
 
-console.log(`API listening on http://localhost:${port}`);
+  const port = process.env.PORT || 5000;
+
+  // Important: bind to 0.0.0.0 for Railway deployment
+  await app.listen(port, '0.0.0.0');
+
+  console.log(`API listening on port ${port}`);
+  console.log('Environment:', process.env.NODE_ENV || 'development');
 }
-bootstrap();
+
+bootstrap().catch(error => {
+  console.error('Failed to start application:', error);
+  process.exit(1);
+});
