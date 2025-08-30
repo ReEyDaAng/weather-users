@@ -4,11 +4,13 @@ import type { SaveUserDto } from './saved.dto';
 
 type Row = { id: string; payload: unknown; created_at: string };
 
+let SUPABASE_SERVICE_ROLE = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1Z2RneXdqb3ZwZnNhcmlqYmpwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjQ2MDU5NiwiZXhwIjoyMDcyMDM2NTk2fQ.wgnebe7xdxt_bpenlW95I54stPQ_7YjSRiFHBb9k8PA';
+
 @Injectable()
 export class SavedService {
   private supa = createClient(
     (process.env.SUPABASE_URL ?? '').trim(),           
-    (process.env.SUPABASE_SERVICE_ROLE ?? '').trim(),
+    (SUPABASE_SERVICE_ROLE ?? '').trim(),
     { auth: { persistSession: false }, db: { schema: 'public' } }
     );
 
