@@ -1,33 +1,44 @@
-import { SupabaseClient } from '@supabase/supabase-js';
 import { Injectable } from '@nestjs/common';
+import { createClient } from '@supabase/supabase-js';
+import type { AppUser, SavedUser } from '../common/types';
 
-type Row = { id: string; payload: any; created_at: string };
+// Точний тип для рядка в таблиці
+type SavedRow = {
+  id: string;
+  payload: AppUser;
+  created_at: string;
+};
 
 @Injectable()
 export class SavedService {
-  constructor(private readonly supa: SupabaseClient) {}
+  // локальний клієнт — лишаємо як було, DI не чіпаємо
+  private readonly supa = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE!,
+  );
 
-  async list() {
+  async list(): Promise<SavedUser[]> {
     const { data, error } = await this.supa
       .from('saved_users')
       .select('*')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return (data ?? []) as Row[];
+
+    // кастимо в наш тип, щоб не було any
+    return (data ?? []) as SavedRow[];
   }
 
-  async save(input: { id: string; payload: any }) {
-    // ВАЖЛИВО: пишемо саме { id, payload }
+  async save(user: SavedUser): Promise<{ ok: true }> {
     const { error } = await this.supa
       .from('saved_users')
-      .upsert({ id: input.id, payload: input.payload });
+      .upsert({ id: user.id, payload: user.payload });
 
     if (error) throw error;
     return { ok: true };
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<{ ok: true }> {
     const { error } = await this.supa
       .from('saved_users')
       .delete()
