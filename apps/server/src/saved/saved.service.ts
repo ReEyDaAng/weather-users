@@ -1,15 +1,25 @@
-// server/src/saved/saved.service.ts
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import type { SaveUserDto } from './saved.dto';
 
 @Injectable()
 export class SavedService {
-  private supa = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE!,
-    { auth: { persistSession: false } }
-  );
+  private supa: SupabaseClient;
+
+  constructor() {
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE;
+
+    // Тимчасове логування для діагностики (видали після перевірки)
+    console.log('[env] SUPABASE_URL =', url);
+    console.log('[env] SERVICE_ROLE length =', key?.length);
+
+    if (!url || !key) {
+      throw new Error('SUPABASE_URL or SUPABASE_SERVICE_ROLE is missing');
+    }
+
+    this.supa = createClient(url, key, { auth: { persistSession: false } });
+  }
 
   async list() {
     const { data, error } = await this.supa
@@ -37,11 +47,7 @@ export class SavedService {
   }
 
   async remove(id: string) {
-    const { error } = await this.supa
-      .from('saved_users')
-      .delete()
-      .eq('id', id);
-
+    const { error } = await this.supa.from('saved_users').delete().eq('id', id);
     if (error) {
       console.error('[saved:remove]', error);
       throw new InternalServerErrorException(error.message);
