@@ -5,7 +5,7 @@ import { useWeather } from '@/hooks/useWeather';
 import { weatherCodeMap } from '@/lib/weatherCodeMap';
 import { useToastStore } from './Toast';
 import { useSaveUser, useRemoveUser } from '@/hooks/useSavedMutations';
-import type { AppUser } from '@/lib/types'; // ⬅️ тип користувача
+import type { AppUser } from '@/lib/types';
 
 export default function UserCard({
   user,
