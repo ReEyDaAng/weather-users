@@ -29,9 +29,26 @@ export class SavedService {
   }
 
   async save(user: SaveUserDto) {
+    // шукаємо, чи вже є такий запис
+    const { data: existing, error: selErr } = await this.supa
+      .from('saved_users')
+      .select('id')
+      .eq('id', user.id)
+      .single();
+
+    if (selErr && selErr.code !== 'PGRST116') { // PGRST116 = no rows found
+      console.error('[saved:check]', selErr);
+      throw new InternalServerErrorException(selErr.message);
+    }
+
+    if (existing) {
+      return { ok: false, reason: 'already' }; // повертаємо ознаку "вже є"
+    }
+
+    // якщо нема — додаємо
     const { error } = await this.supa
       .from('saved_users')
-      .upsert({ id: user.id, payload: user.payload });
+      .insert({ id: user.id, payload: user.payload });
 
     if (error) {
       console.error('[saved:save]', error);
@@ -39,6 +56,7 @@ export class SavedService {
     }
     return { ok: true };
   }
+
 
   async remove(id: string) {
     const { error } = await this.supa

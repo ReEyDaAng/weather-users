@@ -27,9 +27,14 @@ export default function UserCard({
   const w = weatherCodeMap[code] ?? { label: 'N/A', emoji: '❔' };
 
   const onSave = async () => {
-    await saveMut.mutateAsync(user);
-    addToast('Saved!');
+    const res = await saveMut.mutateAsync(user);
+    if (res.reason === 'already') {
+      addToast('Already saved!');
+    } else {
+      addToast('Saved!');
+    }
   };
+
 
   const onRemove = async () => {
     await removeMut.mutateAsync(user.login.uuid);

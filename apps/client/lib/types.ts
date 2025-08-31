@@ -27,3 +27,8 @@ export type WeatherDTO = {
   today: { min: number | null; max: number | null };
   raw?: unknown;
 };
+
+export type SaveResponse = { 
+  ok: boolean; 
+  reason?: 'already' 
+};
