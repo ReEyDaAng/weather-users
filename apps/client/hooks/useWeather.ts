@@ -11,5 +11,10 @@ export function useWeather(
     queryKey: ["weather", lat, lon],
     enabled,
     queryFn: () => api<WeatherDTO>(`/api/weather?lat=${lat}&lon=${lon}`),
+
+    refetchInterval: 5 * 60 * 1000,
+    refetchIntervalInBackground: true,
+    staleTime: 2 * 60 * 1000,
+    refetchOnWindowFocus: true,
   });
 }
