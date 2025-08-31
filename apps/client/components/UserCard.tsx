@@ -37,7 +37,7 @@ export default function UserCard({
   };
 
   return (
-    <div className="rounded-2xl shadow p-4 bg-white dark:bg-gray">
+    <div className="rounded-2xl shadow p-4 bg-white dark:bg-zinc-700">
       <div className="flex gap-4">
         <img
           src={user.picture.large}
