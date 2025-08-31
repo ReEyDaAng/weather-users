@@ -39,7 +39,6 @@ export default function UserCard({
   return (
     <div className="rounded-2xl shadow p-4 bg-white dark:bg-gray">
       <div className="flex gap-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={user.picture.large}
           alt=""
