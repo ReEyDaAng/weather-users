@@ -12,7 +12,7 @@ export type AppUser = {
 };
 
 export type SavedUser = {
-  id: string;        // login.uuid
-  payload: AppUser;  // збережений JSON
+  id: string;
+  payload: AppUser;
   created_at?: string;
 };

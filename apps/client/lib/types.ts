@@ -2,7 +2,7 @@ export type AppUser = {
   login: { uuid: string };
   name: { first: string; last: string };
   email: string;
-  gender: 'male' | 'female';
+  gender: "male" | "female";
   picture: { large: string; medium: string; thumbnail: string };
   location: {
     city: string;
@@ -17,8 +17,8 @@ export type UsersApiResponse = {
 };
 
 export type SavedUser = {
-  id: string;            // login.uuid
-  payload: AppUser;         // збережений JSON
+  id: string;
+  payload: AppUser;
   created_at?: string;
 };
 
@@ -28,7 +28,7 @@ export type WeatherDTO = {
   raw?: unknown;
 };
 
-export type SaveResponse = { 
-  ok: boolean; 
-  reason?: 'already' 
+export type SaveResponse = {
+  ok: boolean;
+  reason?: "already";
 };

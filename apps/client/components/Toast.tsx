@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { create } from 'zustand';
-import { useEffect } from 'react';
+import { create } from "zustand";
+import { useEffect } from "react";
 
 type Toast = {
   id: number;
@@ -31,9 +31,7 @@ export function ToastContainer() {
 
   useEffect(() => {
     if (toasts.length > 0) {
-      const timers = toasts.map((t) =>
-        setTimeout(() => remove(t.id), 3000)
-      );
+      const timers = toasts.map((t) => setTimeout(() => remove(t.id), 3000));
       return () => timers.forEach(clearTimeout);
     }
   }, [toasts, remove]);

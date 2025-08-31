@@ -1,21 +1,20 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api';
-import UserCard from '@/components/UserCard';
-import type { AppUser, UsersApiResponse } from '@/lib/types';
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
+import UserCard from "@/components/UserCard";
+import type { AppUser, UsersApiResponse } from "@/lib/types";
 
 const RESULTS = 12;
-const SEED = 'demo';
+const SEED = "demo";
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
   const [all, setAll] = useState<AppUser[]>([]);
 
-  // повертаємо одразу масив користувачів (без select, щоб тип був простіший)
   const { data, isFetching, isError } = useQuery<AppUser[], Error>({
-    queryKey: ['users', page],
+    queryKey: ["users", page],
     queryFn: async () => {
       const d = await api<UsersApiResponse>(
         `/api/users?page=${page}&results=${RESULTS}&seed=${SEED}`
@@ -46,7 +45,7 @@ export default function Home() {
           disabled={isFetching}
           onClick={() => setPage((p) => p + 1)}
         >
-          {isFetching ? 'Loading…' : 'Load more'}
+          {isFetching ? "Loading…" : "Load more"}
         </button>
       </div>
     </div>

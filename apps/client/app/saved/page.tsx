@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useQuery } from '@tanstack/react-query';
-import UserCard from '@/components/UserCard';
-import { api } from '@/lib/api';
-import type { SavedUser } from '@/lib/types';
+import { useQuery } from "@tanstack/react-query";
+import UserCard from "@/components/UserCard";
+import { api } from "@/lib/api";
+import type { SavedUser } from "@/lib/types";
 
 export default function SavedPage() {
   const { data, isFetching, isError, refetch } = useQuery<SavedUser[], Error>({
-    queryKey: ['saved'],
-    queryFn: () => api<SavedUser[]>('/api/saved'),
+    queryKey: ["saved"],
+    queryFn: () => api<SavedUser[]>("/api/saved"),
     staleTime: 30_000,
     retry: 1,
   });
@@ -21,11 +21,7 @@ export default function SavedPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(data ?? []).map((row) => (
-          <UserCard
-            key={String(row.id)}
-            user={row.payload}
-            hideSave
-          />
+          <UserCard key={String(row.id)} user={row.payload} hideSave />
         ))}
       </div>
 
@@ -35,7 +31,7 @@ export default function SavedPage() {
           disabled={isFetching}
           onClick={() => refetch()}
         >
-          {isFetching ? 'Refreshing…' : 'Refresh'}
+          {isFetching ? "Refreshing…" : "Refresh"}
         </button>
       </div>
     </div>

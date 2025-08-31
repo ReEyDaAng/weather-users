@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useWeather } from '@/hooks/useWeather';
-import { weatherCodeMap } from '@/lib/weatherCodeMap';
-import { useToastStore } from './Toast';
-import { useSaveUser, useRemoveUser } from '@/hooks/useSavedMutations';
-import type { AppUser } from '@/lib/types';
+import { useState } from "react";
+import { useWeather } from "@/hooks/useWeather";
+import { weatherCodeMap } from "@/lib/weatherCodeMap";
+import { useToastStore } from "./Toast";
+import { useSaveUser, useRemoveUser } from "@/hooks/useSavedMutations";
+import type { AppUser } from "@/lib/types";
 
 export default function UserCard({
   user,
@@ -24,21 +24,20 @@ export default function UserCard({
   const removeMut = useRemoveUser();
 
   const code = data?.current?.code ?? 0;
-  const w = weatherCodeMap[code] ?? { label: 'N/A', emoji: '❔' };
+  const w = weatherCodeMap[code] ?? { label: "N/A", emoji: "❔" };
 
   const onSave = async () => {
     const res = await saveMut.mutateAsync(user);
-    if (res.reason === 'already') {
-      addToast('Already saved!');
+    if (res.reason === "already") {
+      addToast("Already saved!");
     } else {
-      addToast('Saved!');
+      addToast("Saved!");
     }
   };
 
-
   const onRemove = async () => {
     await removeMut.mutateAsync(user.login.uuid);
-    addToast('Removed!');
+    addToast("Removed!");
   };
 
   return (
@@ -83,8 +82,10 @@ export default function UserCard({
           </div>
           {data && (
             <div className="text-slate-700 dark:text-slate-300">
-              <span>Now: {data.current.temp}°C</span>{' · '}
-              <span>Min: {data.today.min}°C</span>{' · '}
+              <span>Now: {data.current.temp}°C</span>
+              {" · "}
+              <span>Min: {data.today.min}°C</span>
+              {" · "}
               <span>Max: {data.today.max}°C</span>
             </div>
           )}

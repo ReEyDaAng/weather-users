@@ -1,4 +1,4 @@
-import { useTheme } from '@/hooks/useTheme';
+import { useTheme } from "@/hooks/useTheme";
 
 export default function ThemeToggle() {
   const { theme, toggle } = useTheme();
@@ -10,11 +10,13 @@ export default function ThemeToggle() {
                  px-3 py-1.5 text-sm font-medium
                  hover:bg-zinc-100 dark:hover:bg-zinc-800
                  active:translate-y-[1px] transition"
-      title={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
-      aria-pressed={theme === 'dark'}
+      title={theme === "dark" ? "Switch to light" : "Switch to dark"}
+      aria-pressed={theme === "dark"}
     >
-      <span>{theme === 'dark' ? '🌙' : '☀️'}</span>
-      <span className="hidden sm:inline">{theme === 'dark' ? 'Dark' : 'Light'}</span>
+      <span>{theme === "dark" ? "🌙" : "☀️"}</span>
+      <span className="hidden sm:inline">
+        {theme === "dark" ? "Dark" : "Light"}
+      </span>
     </button>
   );
 }

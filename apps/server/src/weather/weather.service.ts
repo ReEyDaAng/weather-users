@@ -14,7 +14,9 @@ export class WeatherService {
         timezone: 'auto',
       }).toString();
 
-      const r = await fetch(url.toString(), { headers: { accept: 'application/json' } });
+      const r = await fetch(url.toString(), {
+        headers: { accept: 'application/json' },
+      });
       if (!r.ok) {
         const text = await r.text();
         console.error('[weather] HTTP', r.status, text);
@@ -25,8 +27,8 @@ export class WeatherService {
       // обережно з опціональними полями
       const code = j?.current?.weather_code ?? null;
       const temp = j?.current?.temperature_2m ?? null;
-      const min  = j?.daily?.temperature_2m_min?.[0] ?? null;
-      const max  = j?.daily?.temperature_2m_max?.[0] ?? null;
+      const min = j?.daily?.temperature_2m_min?.[0] ?? null;
+      const max = j?.daily?.temperature_2m_max?.[0] ?? null;
 
       return { current: { temp, code }, today: { min, max }, raw: undefined };
     } catch (e: any) {

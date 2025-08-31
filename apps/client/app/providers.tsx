@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// (необов’язково) devtools: import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [client] = useState(
@@ -17,10 +16,5 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       })
   );
 
-  return (
-    <QueryClientProvider client={client}>
-      {children}
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-    </QueryClientProvider>
-  );
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }
