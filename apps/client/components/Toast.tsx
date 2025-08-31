@@ -43,7 +43,7 @@ export function ToastContainer() {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className="px-4 py-2 rounded-lg bg-slate-900 text-white shadow-lg animate-fadeIn"
+          className="px-4 py-2 rounded-lg bg-slate-900 text-white dark:bg-slate-0 dark:text-black shadow-lg animate-fadeIn"
         >
           {t.message}
         </div>
