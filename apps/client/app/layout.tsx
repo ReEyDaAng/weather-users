@@ -1,3 +1,4 @@
+import Navbar from '@/components/Navbar';
 import '../styles/global.css';
 import Providers from './providers';
 import { ToastContainer } from '@/components/Toast';
@@ -14,10 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="bg-slate-50 text-slate-900">
         <header className="border-b bg-white">
-          <nav className="container mx-auto px-4 py-3 flex gap-4">
-            <Link href="/" className="font-semibold">Home</Link>
-            <Link href="/saved" className="text-slate-600 hover:text-slate-900">Saved</Link>
-          </nav>
+          <Navbar />
         </header>
 
         <Providers>

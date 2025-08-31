@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-slate-50 text-slate-900;
+@layer base {
+  :root {
+    --bg: 255 255 255;
+    --fg: 11 18 32;    /* #0b1220 */
+  }
+  .dark {
+    --bg: 11 18 32;
+    --fg: 229 231 235; /* #e5e7eb */
+  }
+  html, body { @apply bg-[rgb(var(--bg))] text-[rgb(var(--fg))] transition-colors duration-200; }
 }
